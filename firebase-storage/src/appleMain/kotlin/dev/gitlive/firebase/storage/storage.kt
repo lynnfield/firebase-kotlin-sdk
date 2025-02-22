@@ -221,6 +221,7 @@ public actual class ListResult(internal val ios: FIRStorageListResult) {
 }
 
 public actual class File(public val url: NSURL)
+public actual val File.name: String get() = url.lastPathComponent.orEmpty()
 
 public actual class Data(public val data: NSData)
 
