@@ -264,6 +264,11 @@ public expect class ListResult {
 public expect class File
 
 /**
+ * Represents the name of a local file for all platforms.
+ * */
+public expect val File.name: String
+
+/**
  * Represents a reference to data for all platforms. Every platform has its own constructor.
  */
 public expect class Data

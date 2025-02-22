@@ -139,6 +139,7 @@ public actual class ListResult(internal val android: com.google.firebase.storage
 }
 
 public actual class File(public val uri: Uri)
+public actual val File.name: String get() = uri.lastPathSegment.orEmpty()
 
 public actual class Data(public val data: ByteArray)
 

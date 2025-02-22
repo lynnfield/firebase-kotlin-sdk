@@ -96,6 +96,7 @@ public actual class ListResult {
         get() = TODO("Not yet implemented")
 }
 
-public actual class File
+public actual typealias File = java.io.File
+public actual val File.name: String get() = name
 public actual class FirebaseStorageException internal constructor(message: String) : FirebaseException(message)
 public actual class Data

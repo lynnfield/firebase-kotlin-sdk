@@ -8,7 +8,16 @@ import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.FirebaseApp
 import dev.gitlive.firebase.FirebaseException
 import dev.gitlive.firebase.js
-import dev.gitlive.firebase.storage.externals.*
+import dev.gitlive.firebase.storage.externals.UploadMetadata
+import dev.gitlive.firebase.storage.externals.connectStorageEmulator
+import dev.gitlive.firebase.storage.externals.deleteObject
+import dev.gitlive.firebase.storage.externals.getDownloadURL
+import dev.gitlive.firebase.storage.externals.getMetadata
+import dev.gitlive.firebase.storage.externals.getStorage
+import dev.gitlive.firebase.storage.externals.listAll
+import dev.gitlive.firebase.storage.externals.ref
+import dev.gitlive.firebase.storage.externals.uploadBytes
+import dev.gitlive.firebase.storage.externals.uploadBytesResumable
 import kotlinx.coroutines.await
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
@@ -116,6 +125,7 @@ public actual class ListResult(js: dev.gitlive.firebase.storage.externals.ListRe
 }
 
 public actual typealias File = org.w3c.files.File
+public actual val File.name: String get() = name
 public actual class Data(public val data: org.khronos.webgl.Uint8Array)
 
 public actual open class FirebaseStorageException(code: String, cause: Throwable) : FirebaseException(code, cause)
