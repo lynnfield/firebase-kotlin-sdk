@@ -33,15 +33,6 @@ val compileSdkVersion by extra(34)
 val targetSdkVersion by extra(34)
 val minSdkVersion by extra(21)
 
-// When skipIosTarget=true, subprojects never register a cocoapods framework, but the
-// native.cocoapods plugin still eagerly creates a `podspec` task that crashes looking
-// up a framework name from an empty list. Disable it in that case.
-if (project.property("skipIosTarget") == "true") {
-    subprojects {
-        tasks.matching { it.name == "podspec" }.configureEach { enabled = false }
-    }
-}
-
 tasks {
     register("updateVersions") {
         dependsOn(
