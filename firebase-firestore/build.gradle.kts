@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
+import org.jetbrains.kotlin.gradle.plugin.cocoapods.CocoapodsExtension
 
 /*
  * Copyright (c) 2020 GitLive Ltd.  Use of this source code is governed by the Apache 2.0 license.
@@ -11,10 +12,13 @@ version = project.property("firebase-firestore.version") as String
 
 plugins {
     id("com.android.library")
-    kotlin("native.cocoapods")
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("testOptionsConvention")
+}
+
+if (project.property("skipIosTarget") != "true") {
+    apply(plugin = "org.jetbrains.kotlin.native.cocoapods")
 }
 
 android {
@@ -83,7 +87,7 @@ kotlin {
         iosArm64()
         iosX64()
         iosSimulatorArm64()
-        cocoapods {
+        (this as org.gradle.api.plugins.ExtensionAware).extensions.configure(CocoapodsExtension::class.java) {
             ios.deploymentTarget = libs.versions.ios.deploymentTarget.get()
             framework {
                 baseName = "FirebaseFirestore"

@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTargetWithSimulatorTests
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
+import org.jetbrains.kotlin.gradle.plugin.cocoapods.CocoapodsExtension
 
 /*
  * Copyright (c) 2020 GitLive Ltd.  Use of this source code is governed by the Apache 2.0 license.
@@ -14,8 +15,11 @@ version = project.property("firebase-auth.version") as String
 plugins {
     id("com.android.library")
     kotlin("multiplatform")
-    kotlin("native.cocoapods")
     id("testOptionsConvention")
+}
+
+if (project.property("skipIosTarget") != "true") {
+    apply(plugin = "org.jetbrains.kotlin.native.cocoapods")
 }
 
 android {
@@ -80,7 +84,7 @@ kotlin {
         iosArm64()
         iosX64().enableKeychainForTests()
         iosSimulatorArm64().enableKeychainForTests()
-        cocoapods {
+        (this as org.gradle.api.plugins.ExtensionAware).extensions.configure(CocoapodsExtension::class.java) {
             ios.deploymentTarget = libs.versions.ios.deploymentTarget.get()
             framework {
                 baseName = "FirebaseAuth"
