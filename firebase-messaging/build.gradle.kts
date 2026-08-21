@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 import utils.TargetPlatform
 import utils.supportsApple
 import utils.toTargetPlatforms
+import org.jetbrains.kotlin.gradle.plugin.cocoapods.CocoapodsExtension
 
 /*
  * Copyright (c) 2020 GitLive Ltd.  Use of this source code is governed by the Apache 2.0 license.
@@ -15,9 +16,12 @@ val supportedPlatforms = (project.property("firebase-messaging.supportedTargets"
 plugins {
     id("com.android.library")
     kotlin("multiplatform")
-    kotlin("native.cocoapods")
     id("testOptionsConvention")
     alias(libs.plugins.publish)
+}
+
+if (supportedPlatforms.supportsApple()) {
+    apply(plugin = "org.jetbrains.kotlin.native.cocoapods")
 }
 
 if (supportedPlatforms.contains(TargetPlatform.Android)) {
@@ -98,7 +102,7 @@ kotlin {
         macosX64()
     }
     if (supportedPlatforms.supportsApple()) {
-        cocoapods {
+        (this as org.gradle.api.plugins.ExtensionAware).extensions.configure(CocoapodsExtension::class.java) {
             if (supportedPlatforms.contains(TargetPlatform.Ios)) {
                 ios.deploymentTarget = libs.versions.ios.deploymentTarget.get()
             }
