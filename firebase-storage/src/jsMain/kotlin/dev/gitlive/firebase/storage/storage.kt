@@ -8,14 +8,19 @@ import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.FirebaseApp
 import dev.gitlive.firebase.FirebaseException
 import dev.gitlive.firebase.js
+import dev.gitlive.firebase.storage.externals.ListOptions
+import dev.gitlive.firebase.storage.externals.SettableMetadata
 import dev.gitlive.firebase.storage.externals.UploadMetadata
 import dev.gitlive.firebase.storage.externals.connectStorageEmulator
 import dev.gitlive.firebase.storage.externals.deleteObject
+import dev.gitlive.firebase.storage.externals.getBytes
 import dev.gitlive.firebase.storage.externals.getDownloadURL
 import dev.gitlive.firebase.storage.externals.getMetadata
 import dev.gitlive.firebase.storage.externals.getStorage
+import dev.gitlive.firebase.storage.externals.list
 import dev.gitlive.firebase.storage.externals.listAll
 import dev.gitlive.firebase.storage.externals.ref
+import dev.gitlive.firebase.storage.externals.updateMetadata
 import dev.gitlive.firebase.storage.externals.uploadBytes
 import dev.gitlive.firebase.storage.externals.uploadBytesResumable
 import kotlinx.coroutines.await
@@ -24,9 +29,9 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.emitAll
+import org.khronos.webgl.Uint8Array
 import kotlin.js.Json
 import kotlin.js.json
-import org.khronos.webgl.Uint8Array
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
@@ -85,7 +90,7 @@ public actual class StorageReference(internal val js: dev.gitlive.firebase.stora
 
     public actual suspend fun delete(): Unit = rethrow { deleteObject(js).await() }
 
-    public actual suspend fun getDownloadUrl(): String = rethrow { getDownloadURL(js).await().toString() }
+    public actual suspend fun getDownloadUrl(): String = rethrow { getDownloadURL(js).await() }
 
     public actual suspend fun list(maxResults: Int, pageToken: String?): ListResult = rethrow {
         ListResult(
