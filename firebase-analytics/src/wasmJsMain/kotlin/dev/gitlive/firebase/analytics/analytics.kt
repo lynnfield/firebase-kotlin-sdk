@@ -1,0 +1,114 @@
+package dev.gitlive.firebase.analytics
+
+import dev.gitlive.firebase.Firebase
+import dev.gitlive.firebase.FirebaseApp
+import dev.gitlive.firebase.FirebaseException
+import dev.gitlive.firebase.analytics.externals.ConsentSettings
+import dev.gitlive.firebase.analytics.externals.getAnalytics
+import dev.gitlive.firebase.js
+import kotlin.time.Duration
+
+public actual val Firebase.analytics: FirebaseAnalytics
+    get() = FirebaseAnalytics(getAnalytics())
+
+public actual fun Firebase.analytics(app: FirebaseApp): FirebaseAnalytics = FirebaseAnalytics(getAnalytics(app.js))
+
+public val FirebaseAnalytics.js: dev.gitlive.firebase.analytics.externals.FirebaseAnalytics get() = js
+
+public actual class FirebaseAnalytics(internal val js: dev.gitlive.firebase.analytics.externals.FirebaseAnalytics) {
+    public actual fun logEvent(
+        name: String,
+        parameters: Map<String, Any>?,
+    ) {
+        val json = parameters?.let { newJsObjectFrom(it) }
+        dev.gitlive.firebase.analytics.externals.logEvent(js, name, json)
+    }
+
+    public actual fun setUserProperty(name: String, value: String) {
+        dev.gitlive.firebase.analytics.externals.setUserProperties(js, newJsObjectFrom(mapOf(name to value)))
+    }
+
+    public actual fun setUserId(id: String?) {
+        dev.gitlive.firebase.analytics.externals.setUserId(js, id)
+    }
+
+    public actual fun setAnalyticsCollectionEnabled(enabled: Boolean) {
+        dev.gitlive.firebase.analytics.externals.setAnalyticsCollectionEnabled(js, enabled)
+    }
+
+    public actual fun setSessionTimeoutInterval(sessionTimeoutInterval: Duration) {
+        // Not supported by the firebase/analytics web SDK.
+    }
+
+    public actual suspend fun getSessionId(): Long? = null // Not supported by the firebase/analytics web SDK.
+
+    public actual fun resetAnalyticsData() {
+        // Not supported by the firebase/analytics web SDK.
+    }
+
+    public actual fun setDefaultEventParameters(parameters: Map<String, String>) {
+        dev.gitlive.firebase.analytics.externals.setDefaultEventParameters(js, newJsObjectFrom(parameters))
+    }
+
+    public actual fun setConsent(consentSettings: Map<ConsentType, ConsentStatus>) {
+        val consent = newConsentSettings()
+        consentSettings.forEach {
+            when (it.key) {
+                ConsentType.AD_PERSONALIZATION -> consent.ad_personalization = it.value.name
+                ConsentType.AD_STORAGE -> consent.ad_storage = it.value.name
+                ConsentType.AD_USER_DATA -> consent.ad_user_data = it.value.name
+                ConsentType.ANALYTICS_STORAGE -> consent.analytics_storage = it.value.name
+            }
+        }
+        dev.gitlive.firebase.analytics.externals.setConsent(consent)
+    }
+
+    public actual enum class ConsentType {
+        AD_PERSONALIZATION,
+        AD_STORAGE,
+        AD_USER_DATA,
+        ANALYTICS_STORAGE,
+    }
+
+    public actual enum class ConsentStatus {
+        GRANTED,
+        DENIED,
+    }
+}
+
+public actual open class FirebaseAnalyticsException(code: String, cause: Throwable) : FirebaseException(code, cause)
+
+internal inline fun <R> rethrow(function: () -> R): R {
+    try {
+        return function()
+    } catch (e: Exception) {
+        throw errorToException(e)
+    }
+}
+
+internal fun errorToException(cause: Exception) = FirebaseAnalyticsException(cause.message.orEmpty().lowercase(), cause)
+
+private fun newConsentSettings(): ConsentSettings = js("({})")
+
+private fun newJsObject(): JsAny = js("({})")
+
+private fun setJsProperty(obj: JsAny, key: String, value: JsAny?) {
+    js("obj[key] = value;")
+}
+
+private fun newJsObjectFrom(map: Map<String, Any?>): JsAny = newJsObject().also { obj ->
+    map.forEach { (key, value) -> setJsProperty(obj, key, value.toJsAnyOrNull()) }
+}
+
+private fun Any?.toJsAnyOrNull(): JsAny? = when (this) {
+    null -> null
+    is String -> toJsString()
+    is Boolean -> toJsBoolean()
+    is Double -> toJsNumber()
+    is Float -> toDouble().toJsNumber()
+    is Int -> toJsNumber()
+    is Long -> toDouble().toJsNumber()
+    is Short -> toInt().toJsNumber()
+    is Byte -> toInt().toJsNumber()
+    else -> toString().toJsString()
+}
