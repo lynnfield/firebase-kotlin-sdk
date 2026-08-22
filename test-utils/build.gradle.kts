@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
@@ -103,6 +104,14 @@ kotlin {
         }
     }
 
+    if (supportedPlatforms.contains(TargetPlatform.Wasm)) {
+        @OptIn(ExperimentalWasmDsl::class)
+        wasmJs {
+            nodejs()
+            browser()
+        }
+    }
+
     sourceSets {
         all {
             languageSettings.apply {
@@ -132,6 +141,14 @@ kotlin {
             getByName("jsMain") {
                 dependencies {
                     implementation(kotlin("test-js"))
+                }
+            }
+        }
+
+        if (supportedPlatforms.contains(TargetPlatform.Wasm)) {
+            getByName("wasmJsMain") {
+                dependencies {
+                    implementation(kotlin("test-wasm-js"))
                 }
             }
         }

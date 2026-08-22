@@ -1,7 +1,7 @@
 package utils
 
 enum class TargetPlatform {
-    Android, Ios, Macos, Tvos, Jvm, Js
+    Android, Ios, Macos, Tvos, Jvm, Js, Wasm
 }
 
 fun String.toTargetPlatforms(): List<TargetPlatform> =
@@ -13,6 +13,7 @@ fun String.toTargetPlatforms(): List<TargetPlatform> =
             "tvos" -> TargetPlatform.Tvos
             "jvm" -> TargetPlatform.Jvm
             "js" -> TargetPlatform.Js
+            "wasm" -> TargetPlatform.Wasm
             else -> throw IllegalArgumentException("Unknown target platform: $it")
         }
     }

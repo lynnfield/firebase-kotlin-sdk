@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
@@ -127,6 +128,26 @@ kotlin {
     if (supportedPlatforms.contains(TargetPlatform.Js)) {
         js(IR) {
             useCommonJs()
+            nodejs {
+                testTask {
+                    useKarma {
+                        useChromeHeadless()
+                    }
+                }
+            }
+            browser {
+                testTask {
+                    useKarma {
+                        useChromeHeadless()
+                    }
+                }
+            }
+        }
+    }
+
+    if (supportedPlatforms.contains(TargetPlatform.Wasm)) {
+        @OptIn(ExperimentalWasmDsl::class)
+        wasmJs {
             nodejs {
                 testTask {
                     useKarma {
