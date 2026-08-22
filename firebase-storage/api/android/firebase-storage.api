@@ -117,6 +117,7 @@ public final class dev/gitlive/firebase/storage/android {
 	public static final fun getAndroid (Ldev/gitlive/firebase/storage/FirebaseStorage;)Lcom/google/firebase/storage/FirebaseStorage;
 	public static final fun getAndroid (Ldev/gitlive/firebase/storage/ListResult;)Lcom/google/firebase/storage/ListResult;
 	public static final fun getAndroid (Ldev/gitlive/firebase/storage/StorageReference;)Lcom/google/firebase/storage/StorageReference;
+	public static final fun getName (Ldev/gitlive/firebase/storage/File;)Ljava/lang/String;
 	public static final fun getStorage (Ldev/gitlive/firebase/Firebase;)Ldev/gitlive/firebase/storage/FirebaseStorage;
 	public static final fun storage (Ldev/gitlive/firebase/Firebase;Ldev/gitlive/firebase/FirebaseApp;)Ldev/gitlive/firebase/storage/FirebaseStorage;
 	public static final fun storage (Ldev/gitlive/firebase/Firebase;Ldev/gitlive/firebase/FirebaseApp;Ljava/lang/String;)Ldev/gitlive/firebase/storage/FirebaseStorage;
