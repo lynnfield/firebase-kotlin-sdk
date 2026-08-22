@@ -5,7 +5,6 @@
 package dev.gitlive.firebase.analytics.externals
 
 import dev.gitlive.firebase.externals.FirebaseApp
-import kotlin.js.Promise
 import kotlin.js.Json
 
 public external fun getAnalytics(app: FirebaseApp? = definedExternally): FirebaseAnalytics
@@ -13,16 +12,13 @@ public external fun getAnalytics(app: FirebaseApp? = definedExternally): Firebas
 public external fun logEvent(app: FirebaseAnalytics, name: String, parameters: Json?)
 public external fun setUserProperties(app: FirebaseAnalytics, properties: Json)
 public external fun setUserId(app: FirebaseAnalytics, id: String?)
-public external fun resetAnalyticsData(app: FirebaseAnalytics)
 public external fun setDefaultEventParameters(app: FirebaseAnalytics, parameters: Map<String, String>)
 public external fun setAnalyticsCollectionEnabled(app: FirebaseAnalytics, enabled: Boolean)
-public external fun setSessionTimeoutInterval(app: FirebaseAnalytics, sessionTimeoutInterval: Long)
-public external fun getSessionId(app: FirebaseAnalytics): Promise<Long?>
-public external fun setConsent(app: FirebaseAnalytics, consentSettings: ConsentSettings)
+public external fun setConsent(consentSettings: ConsentSettings)
 
 public external interface FirebaseAnalytics
 
-public external class ConsentSettings {
+public external interface ConsentSettings {
     public var ad_personalization: String?
     public var ad_storage: String?
     public var ad_user_data: String?
