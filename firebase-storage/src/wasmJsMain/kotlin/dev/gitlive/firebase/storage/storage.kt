@@ -241,9 +241,9 @@ private fun setJsProperty(obj: JsAny, key: String, value: JsAny?) {
     js("obj[key] = value;")
 }
 
-private fun getJsProperty(obj: JsAny, key: String): JsAny? = js("obj[key];")
+private fun getJsProperty(obj: JsAny, key: String): JsAny? = js("obj[key]")
 
-private fun jsObjectKeys(obj: JsAny): kotlin.js.JsArray<JsString> = js("Object.keys(obj);")
+private fun jsObjectKeys(obj: JsAny): kotlin.js.JsArray<JsString> = js("Object.keys(obj)")
 
 private fun byteArrayToJsUint8Array(bytes: ByteArray): JsUint8Array =
     dev.gitlive.firebase.storage.externals.newJsUint8Array(bytes.size).also { array ->
