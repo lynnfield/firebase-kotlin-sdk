@@ -202,6 +202,10 @@ kotlin {
             getByName("androidMain") {
                 dependencies {
                     api(libs.google.firebase.auth)
+                    // firebase-auth's Android AAR uses checker-framework type annotations
+                    // (e.g. @UnknownInitialization) that aren't transitively resolvable,
+                    // which fails Kotlin compilation of androidMain without this on the classpath.
+                    compileOnly(libs.checker.qual)
                 }
             }
 
