@@ -13,27 +13,27 @@ public actual val Firebase.analytics: FirebaseAnalytics
 
 public actual fun Firebase.analytics(app: FirebaseApp): FirebaseAnalytics = FirebaseAnalytics(getAnalytics(app.js))
 
-public val FirebaseAnalytics.js: dev.gitlive.firebase.analytics.externals.FirebaseAnalytics get() = js
+public val FirebaseAnalytics.js: dev.gitlive.firebase.analytics.externals.FirebaseAnalytics get() = native
 
-public actual class FirebaseAnalytics(internal val js: dev.gitlive.firebase.analytics.externals.FirebaseAnalytics) {
+public actual class FirebaseAnalytics(internal val native: dev.gitlive.firebase.analytics.externals.FirebaseAnalytics) {
     public actual fun logEvent(
         name: String,
         parameters: Map<String, Any>?,
     ) {
         val json = parameters?.let { newJsObjectFrom(it) }
-        dev.gitlive.firebase.analytics.externals.logEvent(js, name, json)
+        dev.gitlive.firebase.analytics.externals.logEvent(native, name, json)
     }
 
     public actual fun setUserProperty(name: String, value: String) {
-        dev.gitlive.firebase.analytics.externals.setUserProperties(js, newJsObjectFrom(mapOf(name to value)))
+        dev.gitlive.firebase.analytics.externals.setUserProperties(native, newJsObjectFrom(mapOf(name to value)))
     }
 
     public actual fun setUserId(id: String?) {
-        dev.gitlive.firebase.analytics.externals.setUserId(js, id)
+        dev.gitlive.firebase.analytics.externals.setUserId(native, id)
     }
 
     public actual fun setAnalyticsCollectionEnabled(enabled: Boolean) {
-        dev.gitlive.firebase.analytics.externals.setAnalyticsCollectionEnabled(js, enabled)
+        dev.gitlive.firebase.analytics.externals.setAnalyticsCollectionEnabled(native, enabled)
     }
 
     public actual fun setSessionTimeoutInterval(sessionTimeoutInterval: Duration) {
@@ -47,7 +47,7 @@ public actual class FirebaseAnalytics(internal val js: dev.gitlive.firebase.anal
     }
 
     public actual fun setDefaultEventParameters(parameters: Map<String, String>) {
-        dev.gitlive.firebase.analytics.externals.setDefaultEventParameters(js, newJsObjectFrom(parameters))
+        dev.gitlive.firebase.analytics.externals.setDefaultEventParameters(native, newJsObjectFrom(parameters))
     }
 
     public actual fun setConsent(consentSettings: Map<ConsentType, ConsentStatus>) {

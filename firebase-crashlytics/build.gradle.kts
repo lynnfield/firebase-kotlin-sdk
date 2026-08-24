@@ -80,7 +80,7 @@ kotlin {
         androidTarget {
             instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
             unitTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
-            publishAllLibraryVariants()
+            publishLibraryVariants("release")
         }
     }
 

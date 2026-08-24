@@ -63,7 +63,6 @@ internal actual class NativeDocumentReference actual constructor(actual val nati
 
     actual suspend fun setEncoded(encodedData: EncodedObject, setOptions: SetOptions): Unit = rethrow {
         setDoc(js, encodedData.wasmJs.toJsAny()!!, setOptions.js).await<JsAny?>()
-        Unit
     }
 
     actual suspend fun updateEncoded(encodedData: EncodedObject): Unit = rethrow {
@@ -71,7 +70,6 @@ internal actual class NativeDocumentReference actual constructor(actual val nati
             js,
             encodedData.wasmJs.toJsAny()!!,
         ).await<JsAny?>()
-        Unit
     }
 
     actual suspend fun updateEncoded(encodedFieldsAndValues: List<FieldAndValue>) {
@@ -92,7 +90,6 @@ internal actual class NativeDocumentReference actual constructor(actual val nati
 
     actual suspend fun delete(): Unit = rethrow {
         deleteDoc(js).await<JsAny?>()
-        Unit
     }
 
     override fun equals(other: Any?): Boolean = this === other ||

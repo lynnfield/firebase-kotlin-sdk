@@ -44,70 +44,70 @@ public actual fun Firebase.storage(app: FirebaseApp): FirebaseStorage = Firebase
 
 public actual fun Firebase.storage(app: FirebaseApp, url: String): FirebaseStorage = FirebaseStorage(getStorage(app.js, url))
 
-public val FirebaseStorage.js: dev.gitlive.firebase.storage.externals.FirebaseStorage get() = js
+public val FirebaseStorage.js: dev.gitlive.firebase.storage.externals.FirebaseStorage get() = native
 
-public actual class FirebaseStorage(internal val js: dev.gitlive.firebase.storage.externals.FirebaseStorage) {
-    public actual val maxOperationRetryTime: Duration = js.maxOperationRetryTime.milliseconds
-    public actual val maxUploadRetryTime: Duration = js.maxUploadRetryTime.milliseconds
+public actual class FirebaseStorage(internal val native: dev.gitlive.firebase.storage.externals.FirebaseStorage) {
+    public actual val maxOperationRetryTime: Duration = native.maxOperationRetryTime.milliseconds
+    public actual val maxUploadRetryTime: Duration = native.maxUploadRetryTime.milliseconds
 
     public actual fun setMaxOperationRetryTime(maxOperationRetryTime: Duration) {
-        js.maxOperationRetryTime = maxOperationRetryTime.toDouble(DurationUnit.MILLISECONDS)
+        native.maxOperationRetryTime = maxOperationRetryTime.toDouble(DurationUnit.MILLISECONDS)
     }
 
     public actual fun setMaxUploadRetryTime(maxUploadRetryTime: Duration) {
-        js.maxUploadRetryTime = maxUploadRetryTime.toDouble(DurationUnit.MILLISECONDS)
+        native.maxUploadRetryTime = maxUploadRetryTime.toDouble(DurationUnit.MILLISECONDS)
     }
 
     public actual fun useEmulator(host: String, port: Int) {
-        connectStorageEmulator(js, host, port.toDouble())
+        connectStorageEmulator(native, host, port.toDouble())
     }
 
-    public actual val reference: StorageReference get() = StorageReference(ref(js))
+    public actual val reference: StorageReference get() = StorageReference(ref(native))
 
-    public actual fun reference(location: String): StorageReference = rethrow { StorageReference(ref(js, location)) }
+    public actual fun reference(location: String): StorageReference = rethrow { StorageReference(ref(native, location)) }
 
-    public actual fun getReferenceFromUrl(fullUrl: String): StorageReference = rethrow { StorageReference(ref(js, fullUrl)) }
+    public actual fun getReferenceFromUrl(fullUrl: String): StorageReference = rethrow { StorageReference(ref(native, fullUrl)) }
 }
 
-public val StorageReference.js: dev.gitlive.firebase.storage.externals.StorageReference get() = js
+public val StorageReference.js: dev.gitlive.firebase.storage.externals.StorageReference get() = native
 
-public actual class StorageReference(internal val js: dev.gitlive.firebase.storage.externals.StorageReference) {
-    public actual val path: String get() = js.fullPath
-    public actual val name: String get() = js.name
-    public actual val bucket: String get() = js.bucket
-    public actual val parent: StorageReference? get() = js.parent?.let { StorageReference(it) }
-    public actual val root: StorageReference get() = StorageReference(js.root)
-    public actual val storage: FirebaseStorage get() = FirebaseStorage(js.storage)
+public actual class StorageReference(internal val native: dev.gitlive.firebase.storage.externals.StorageReference) {
+    public actual val path: String get() = native.fullPath
+    public actual val name: String get() = native.name
+    public actual val bucket: String get() = native.bucket
+    public actual val parent: StorageReference? get() = native.parent?.let { StorageReference(it) }
+    public actual val root: StorageReference get() = StorageReference(native.root)
+    public actual val storage: FirebaseStorage get() = FirebaseStorage(native.storage)
 
-    public actual suspend fun getMetadata(): FirebaseStorageMetadata? = rethrow { getMetadata(js).await<dev.gitlive.firebase.storage.externals.FullMetadata>().toFirebaseStorageMetadata() }
+    public actual suspend fun getMetadata(): FirebaseStorageMetadata? = rethrow { getMetadata(native).await<dev.gitlive.firebase.storage.externals.FullMetadata>().toFirebaseStorageMetadata() }
 
-    public actual suspend fun getData(maxDownloadSizeBytes: Long): Data = rethrow { Data(jsArrayBufferToByteArray(getBytes(js, maxDownloadSizeBytes.toDouble()).await<JsAny>())) }
+    public actual suspend fun getData(maxDownloadSizeBytes: Long): Data = rethrow { Data(jsArrayBufferToByteArray(getBytes(native, maxDownloadSizeBytes.toDouble()).await<JsAny>())) }
 
-    public actual suspend fun updateMetadata(metadata: FirebaseStorageMetadata): FirebaseStorageMetadata? = rethrow { updateMetadata(js, metadata.toStorageMetadata()).await<dev.gitlive.firebase.storage.externals.FullMetadata>().toFirebaseStorageMetadata() }
+    public actual suspend fun updateMetadata(metadata: FirebaseStorageMetadata): FirebaseStorageMetadata? = rethrow { updateMetadata(native, metadata.toStorageMetadata()).await<dev.gitlive.firebase.storage.externals.FullMetadata>().toFirebaseStorageMetadata() }
 
-    public actual fun child(path: String): StorageReference = StorageReference(ref(js, path))
+    public actual fun child(path: String): StorageReference = StorageReference(ref(native, path))
 
-    public actual suspend fun delete(): Unit = rethrow { deleteObject(js).await<JsAny?>() }
+    public actual suspend fun delete(): Unit = rethrow { deleteObject(native).await<JsAny?>() }
 
-    public actual suspend fun getDownloadUrl(): String = rethrow { getDownloadURL(js).await<JsString>().toString() }
+    public actual suspend fun getDownloadUrl(): String = rethrow { getDownloadURL(native).await<JsString>().toString() }
 
     public actual suspend fun list(maxResults: Int, pageToken: String?): ListResult = rethrow {
         ListResult(
             list(
-                js,
+                native,
                 newListOptions(maxResults.toDouble(), pageToken),
             ).await(),
         )
     }
 
-    public actual suspend fun listAll(): ListResult = rethrow { ListResult(listAll(js).await()) }
+    public actual suspend fun listAll(): ListResult = rethrow { ListResult(listAll(native).await()) }
 
-    public actual suspend fun putFile(file: File, metadata: FirebaseStorageMetadata?): Unit = rethrow { uploadBytes(js, file, metadata?.toStorageMetadata()).await() }
+    public actual suspend fun putFile(file: File, metadata: FirebaseStorageMetadata?): Unit = rethrow { uploadBytes(native, file, metadata?.toStorageMetadata()).await() }
 
-    public actual suspend fun putData(data: Data, metadata: FirebaseStorageMetadata?): Unit = rethrow { uploadBytes(js, byteArrayToJsUint8Array(data.data), metadata?.toStorageMetadata()).await() }
+    public actual suspend fun putData(data: Data, metadata: FirebaseStorageMetadata?): Unit = rethrow { uploadBytes(native, byteArrayToJsUint8Array(data.data), metadata?.toStorageMetadata()).await() }
 
     public actual fun putDataResumable(data: Data, metadata: FirebaseStorageMetadata?): ProgressFlow = rethrow {
-        val uploadTask = uploadBytesResumable(js, byteArrayToJsUint8Array(data.data), metadata?.toStorageMetadata())
+        val uploadTask = uploadBytesResumable(native, byteArrayToJsUint8Array(data.data), metadata?.toStorageMetadata())
 
         val flow = callbackFlow {
             val unsubscribe = uploadTask.on(
@@ -136,7 +136,7 @@ public actual class StorageReference(internal val js: dev.gitlive.firebase.stora
     }
 
     public actual fun putFileResumable(file: File, metadata: FirebaseStorageMetadata?): ProgressFlow = rethrow {
-        val uploadTask = uploadBytesResumable(js, file, metadata?.toStorageMetadata())
+        val uploadTask = uploadBytesResumable(native, file, metadata?.toStorageMetadata())
 
         val flow = callbackFlow {
             val unsubscribe = uploadTask.on(

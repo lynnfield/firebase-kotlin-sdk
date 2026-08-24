@@ -44,6 +44,5 @@ internal actual class NativeWriteBatchWrapper internal actual constructor(actual
 
     actual suspend fun commit(): Unit = rethrow {
         js.commit().await<JsAny?>()
-        Unit
     }
 }

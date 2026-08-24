@@ -137,27 +137,27 @@ public actual class FirebaseFirestoreException(cause: Throwable, public val code
 @Suppress("EXTENSION_SHADOWED_BY_MEMBER")
 public actual val FirebaseFirestoreException.code: FirestoreExceptionCode get() = code
 
-public val QuerySnapshot.js: JsQuerySnapshot get() = js
+public val QuerySnapshot.js: JsQuerySnapshot get() = native
 
-public actual class QuerySnapshot(internal val js: JsQuerySnapshot) {
+public actual class QuerySnapshot(internal val native: JsQuerySnapshot) {
     public actual val documents: List<DocumentSnapshot>
-        get() = js.docs.toKotlinList().map { DocumentSnapshot(NativeDocumentSnapshotWrapper(it)) }
+        get() = native.docs.toKotlinList().map { DocumentSnapshot(NativeDocumentSnapshotWrapper(it)) }
     public actual val documentChanges: List<DocumentChange>
-        get() = js.docChanges().toKotlinList().map { DocumentChange(it) }
-    public actual val metadata: SnapshotMetadata get() = SnapshotMetadata(js.metadata)
+        get() = native.docChanges().toKotlinList().map { DocumentChange(it) }
+    public actual val metadata: SnapshotMetadata get() = SnapshotMetadata(native.metadata)
 }
 
-public val DocumentChange.js: JsDocumentChange get() = js
+public val DocumentChange.js: JsDocumentChange get() = native
 
-public actual class DocumentChange(internal val js: JsDocumentChange) {
+public actual class DocumentChange(internal val native: JsDocumentChange) {
     public actual val document: DocumentSnapshot
-        get() = DocumentSnapshot(NativeDocumentSnapshotWrapper(js.doc))
+        get() = DocumentSnapshot(NativeDocumentSnapshotWrapper(native.doc))
     public actual val newIndex: Int
-        get() = js.newIndex
+        get() = native.newIndex
     public actual val oldIndex: Int
-        get() = js.oldIndex
+        get() = native.oldIndex
     public actual val type: ChangeType
-        get() = ChangeType.entries.first { it.jsString == js.type }
+        get() = ChangeType.entries.first { it.jsString == native.type }
 }
 
 internal actual data class NativeDocumentSnapshot(val js: JsDocumentSnapshot)
@@ -165,16 +165,16 @@ internal actual data class NativeDocumentSnapshot(val js: JsDocumentSnapshot)
 public operator fun DocumentSnapshot.Companion.invoke(js: JsDocumentSnapshot): DocumentSnapshot = DocumentSnapshot(NativeDocumentSnapshot(js))
 public val DocumentSnapshot.js: dev.gitlive.firebase.firestore.externals.DocumentSnapshot get() = native.js
 
-public val SnapshotMetadata.js: dev.gitlive.firebase.firestore.externals.SnapshotMetadata get() = js
+public val SnapshotMetadata.js: dev.gitlive.firebase.firestore.externals.SnapshotMetadata get() = native
 
-public actual class SnapshotMetadata(internal val js: JsSnapshotMetadata) {
-    public actual val hasPendingWrites: Boolean get() = js.hasPendingWrites
-    public actual val isFromCache: Boolean get() = js.fromCache
+public actual class SnapshotMetadata(internal val native: JsSnapshotMetadata) {
+    public actual val hasPendingWrites: Boolean get() = native.hasPendingWrites
+    public actual val isFromCache: Boolean get() = native.fromCache
 }
 
-public val FieldPath.js: dev.gitlive.firebase.firestore.externals.FieldPath get() = js
+public val FieldPath.js: dev.gitlive.firebase.firestore.externals.FieldPath get() = native
 
-public actual class FieldPath private constructor(internal val js: JsFieldPath) {
+public actual class FieldPath private constructor(internal val native: JsFieldPath) {
 
     public actual companion object {
         public actual val documentId: FieldPath = FieldPath(jsDocumentId())
@@ -185,10 +185,10 @@ public actual class FieldPath private constructor(internal val js: JsFieldPath) 
         },
     )
     public actual val documentId: FieldPath get() = FieldPath.documentId
-    public actual val encoded: EncodedFieldPath = js
-    override fun equals(other: Any?): Boolean = other is FieldPath && js.isEqual(other.js)
-    override fun hashCode(): Int = js.hashCode()
-    override fun toString(): String = js.toString()
+    public actual val encoded: EncodedFieldPath = native
+    override fun equals(other: Any?): Boolean = other is FieldPath && native.isEqual(other.js)
+    override fun hashCode(): Int = native.hashCode()
+    override fun toString(): String = native.toString()
 }
 
 public actual typealias EncodedFieldPath = JsFieldPath

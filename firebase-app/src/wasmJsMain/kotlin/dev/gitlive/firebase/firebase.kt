@@ -22,18 +22,18 @@ public actual fun Firebase.initialize(context: Any?, options: FirebaseOptions, n
 
 public actual fun Firebase.initialize(context: Any?, options: FirebaseOptions): FirebaseApp = FirebaseApp(initializeApp(options.toJsAny()))
 
-public val FirebaseApp.js: JsFirebaseApp get() = js
+public val FirebaseApp.js: JsFirebaseApp get() = native
 
-public actual class FirebaseApp internal constructor(internal val js: JsFirebaseApp) {
+public actual class FirebaseApp internal constructor(internal val native: JsFirebaseApp) {
     public actual val name: String
-        get() = js.name
+        get() = native.name
     public actual val options: FirebaseOptions
-        get() = js.options.run {
+        get() = native.options.run {
             FirebaseOptions(appId, apiKey, databaseURL, gaTrackingId, storageBucket, projectId, messagingSenderId, authDomain)
         }
 
     public actual suspend fun delete() {
-        deleteApp(js).await<JsAny?>()
+        deleteApp(native).await<JsAny?>()
     }
 }
 

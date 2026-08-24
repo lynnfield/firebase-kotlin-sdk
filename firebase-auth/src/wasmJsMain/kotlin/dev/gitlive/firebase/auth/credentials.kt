@@ -11,11 +11,11 @@ import kotlinx.coroutines.await
 import dev.gitlive.firebase.auth.externals.AuthCredential as JsAuthCredential
 import dev.gitlive.firebase.auth.externals.OAuthProvider as JsOAuthProvider
 
-public val AuthCredential.js: JsAuthCredential get() = js
+public val AuthCredential.js: JsAuthCredential get() = native
 
-public actual open class AuthCredential(internal val js: JsAuthCredential) {
+public actual open class AuthCredential(internal val native: JsAuthCredential) {
     public actual val providerId: String
-        get() = js.providerId
+        get() = native.providerId
 }
 
 public actual class PhoneAuthCredential(js: JsAuthCredential) : AuthCredential(js)
@@ -47,9 +47,9 @@ public actual object GoogleAuthProvider {
     }
 }
 
-public val OAuthProvider.js: JsOAuthProvider get() = js
+public val OAuthProvider.js: JsOAuthProvider get() = native
 
-public actual class OAuthProvider(internal val js: JsOAuthProvider) {
+public actual class OAuthProvider(internal val native: JsOAuthProvider) {
 
     public actual constructor(
         provider: String,
@@ -58,8 +58,8 @@ public actual class OAuthProvider(internal val js: JsOAuthProvider) {
         auth: FirebaseAuth,
     ) : this(JsOAuthProvider(provider)) {
         rethrow {
-            scopes.forEach { js.addScope(it) }
-            js.setCustomParameters(customParametersToJsAny(customParameters))
+            scopes.forEach { native.addScope(it) }
+            native.setCustomParameters(customParametersToJsAny(customParameters))
         }
     }
     public actual companion object {
@@ -87,15 +87,15 @@ private fun oAuthCredentialOptionsToJsAny(accessToken: String?, idToken: String?
     "({ accessToken: accessToken, idToken: idToken, rawNonce: rawNonce })",
 )
 
-public val PhoneAuthProvider.js: JsPhoneAuthProvider get() = js
+public val PhoneAuthProvider.js: JsPhoneAuthProvider get() = native
 
-public actual class PhoneAuthProvider(internal val js: JsPhoneAuthProvider) {
+public actual class PhoneAuthProvider(internal val native: JsPhoneAuthProvider) {
 
     public actual constructor(auth: FirebaseAuth) : this(JsPhoneAuthProvider(auth.js))
 
     public actual fun credential(verificationId: String, smsCode: String): PhoneAuthCredential = PhoneAuthCredential(JsPhoneAuthProvider.credential(verificationId, smsCode))
     public actual suspend fun verifyPhoneNumber(phoneNumber: String, verificationProvider: PhoneVerificationProvider): AuthCredential = rethrow {
-        val verificationId = js.verifyPhoneNumber(phoneNumber, verificationProvider.verifier).await<kotlin.js.JsString>().toString()
+        val verificationId = native.verifyPhoneNumber(phoneNumber, verificationProvider.verifier).await<kotlin.js.JsString>().toString()
         val verificationCode = verificationProvider.getVerificationCode(verificationId)
         credential(verificationId, verificationCode)
     }

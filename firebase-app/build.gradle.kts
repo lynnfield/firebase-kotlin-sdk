@@ -81,7 +81,7 @@ kotlin {
         androidTarget {
             instrumentedTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
             unitTestVariant.sourceSetTree.set(KotlinSourceSetTree.test)
-            publishAllLibraryVariants()
+            publishLibraryVariants("release")
         }
     }
 
@@ -126,7 +126,7 @@ kotlin {
     }
 
     if (supportedPlatforms.contains(TargetPlatform.Js)) {
-        js(IR) {
+        js {
             useCommonJs()
             nodejs {
                 testTask {
@@ -177,6 +177,9 @@ kotlin {
                     || name.lowercase().contains("macos")
                 ) {
                     optIn("kotlinx.cinterop.ExperimentalForeignApi")
+                }
+                if (name.lowercase().contains("wasmjs")) {
+                    optIn("kotlin.js.ExperimentalWasmJsInterop")
                 }
             }
         }

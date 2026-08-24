@@ -24,10 +24,7 @@ fun TestOptions.configureTestOptions(project: Project) {
         }
     }
     animationsDisabled = true
-    emulatorSnapshots {
-        enableForTestFailures = false
-    }
-    managedDevices.devices.create<ManagedVirtualDevice>("gradleManagedDevice") {
+    managedDevices.allDevices.create<ManagedVirtualDevice>("gradleManagedDevice") {
         device = "Pixel 2"
         apiLevel = 33
         systemImageSource = "google-atd"
