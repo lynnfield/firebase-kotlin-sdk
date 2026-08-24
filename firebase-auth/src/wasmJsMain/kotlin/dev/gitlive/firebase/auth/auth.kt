@@ -44,64 +44,64 @@ public actual val Firebase.auth: FirebaseAuth
 
 public actual fun Firebase.auth(app: FirebaseApp): FirebaseAuth = rethrow { FirebaseAuth(getAuth(app.js)) }
 
-public val FirebaseAuth.js: Auth get() = js
+public val FirebaseAuth.js: Auth get() = native
 
-public actual class FirebaseAuth internal constructor(internal val js: Auth) {
+public actual class FirebaseAuth internal constructor(internal val native: Auth) {
 
     public actual val currentUser: FirebaseUser?
-        get() = rethrow { js.currentUser?.let { FirebaseUser(it) } }
+        get() = rethrow { native.currentUser?.let { FirebaseUser(it) } }
 
     public actual val authStateChanged: Flow<FirebaseUser?> get() = callbackFlow {
-        val unsubscribe = js.onAuthStateChanged {
+        val unsubscribe = native.onAuthStateChanged {
             trySend(it?.let { FirebaseUser(it) })
         }
         awaitClose { unsubscribe() }
     }
 
     public actual val idTokenChanged: Flow<FirebaseUser?> get() = callbackFlow {
-        val unsubscribe = js.onIdTokenChanged {
+        val unsubscribe = native.onIdTokenChanged {
             trySend(it?.let { FirebaseUser(it) })
         }
         awaitClose { unsubscribe() }
     }
 
     public actual var languageCode: String
-        get() = js.languageCode ?: ""
+        get() = native.languageCode ?: ""
         set(value) {
-            js.languageCode = value
+            native.languageCode = value
         }
 
-    public actual suspend fun applyActionCode(code: String): Unit = rethrow { applyActionCode(js, code).await<JsAny?>() }
-    public actual suspend fun confirmPasswordReset(code: String, newPassword: String): Unit = rethrow { confirmPasswordReset(js, code, newPassword).await<JsAny?>() }
+    public actual suspend fun applyActionCode(code: String): Unit = rethrow { applyActionCode(native, code).await<JsAny?>() }
+    public actual suspend fun confirmPasswordReset(code: String, newPassword: String): Unit = rethrow { confirmPasswordReset(native, code, newPassword).await<JsAny?>() }
 
-    public actual suspend fun createUserWithEmailAndPassword(email: String, password: String): AuthResult = rethrow { AuthResult(createUserWithEmailAndPassword(js, email, password).await()) }
+    public actual suspend fun createUserWithEmailAndPassword(email: String, password: String): AuthResult = rethrow { AuthResult(createUserWithEmailAndPassword(native, email, password).await()) }
 
-    public actual suspend fun fetchSignInMethodsForEmail(email: String): List<String> = rethrow { fetchSignInMethodsForEmail(js, email).await<JsArray<JsString>>().toList().map { it.toString() } }
+    public actual suspend fun fetchSignInMethodsForEmail(email: String): List<String> = rethrow { fetchSignInMethodsForEmail(native, email).await<JsArray<JsString>>().toList().map { it.toString() } }
 
-    public actual suspend fun sendPasswordResetEmail(email: String, actionCodeSettings: ActionCodeSettings?): Unit = rethrow { sendPasswordResetEmail(js, email, actionCodeSettings?.toJsAny()).await<JsAny?>() }
+    public actual suspend fun sendPasswordResetEmail(email: String, actionCodeSettings: ActionCodeSettings?): Unit = rethrow { sendPasswordResetEmail(native, email, actionCodeSettings?.toJsAny()).await<JsAny?>() }
 
-    public actual suspend fun sendSignInLinkToEmail(email: String, actionCodeSettings: ActionCodeSettings): Unit = rethrow { sendSignInLinkToEmail(js, email, actionCodeSettings.toJsAny()).await<JsAny?>() }
+    public actual suspend fun sendSignInLinkToEmail(email: String, actionCodeSettings: ActionCodeSettings): Unit = rethrow { sendSignInLinkToEmail(native, email, actionCodeSettings.toJsAny()).await<JsAny?>() }
 
-    public actual fun isSignInWithEmailLink(link: String): Boolean = rethrow { isSignInWithEmailLink(js, link) }
+    public actual fun isSignInWithEmailLink(link: String): Boolean = rethrow { isSignInWithEmailLink(native, link) }
 
-    public actual suspend fun signInWithEmailAndPassword(email: String, password: String): AuthResult = rethrow { AuthResult(signInWithEmailAndPassword(js, email, password).await()) }
+    public actual suspend fun signInWithEmailAndPassword(email: String, password: String): AuthResult = rethrow { AuthResult(signInWithEmailAndPassword(native, email, password).await()) }
 
-    public actual suspend fun signInWithCustomToken(token: String): AuthResult = rethrow { AuthResult(signInWithCustomToken(js, token).await()) }
+    public actual suspend fun signInWithCustomToken(token: String): AuthResult = rethrow { AuthResult(signInWithCustomToken(native, token).await()) }
 
-    public actual suspend fun signInAnonymously(): AuthResult = rethrow { AuthResult(signInAnonymously(js).await()) }
+    public actual suspend fun signInAnonymously(): AuthResult = rethrow { AuthResult(signInAnonymously(native).await()) }
 
-    public actual suspend fun signInWithCredential(authCredential: AuthCredential): AuthResult = rethrow { AuthResult(signInWithCredential(js, authCredential.js).await()) }
+    public actual suspend fun signInWithCredential(authCredential: AuthCredential): AuthResult = rethrow { AuthResult(signInWithCredential(native, authCredential.js).await()) }
 
-    public actual suspend fun signInWithEmailLink(email: String, link: String): AuthResult = rethrow { AuthResult(signInWithEmailLink(js, email, link).await()) }
+    public actual suspend fun signInWithEmailLink(email: String, link: String): AuthResult = rethrow { AuthResult(signInWithEmailLink(native, email, link).await()) }
 
-    public actual suspend fun signOut(): Unit = rethrow { signOut(js).await<JsAny?>() }
+    public actual suspend fun signOut(): Unit = rethrow { signOut(native).await<JsAny?>() }
 
-    public actual suspend fun updateCurrentUser(user: FirebaseUser): Unit = rethrow { updateCurrentUser(js, user.js).await<JsAny?>() }
+    public actual suspend fun updateCurrentUser(user: FirebaseUser): Unit = rethrow { updateCurrentUser(native, user.js).await<JsAny?>() }
 
-    public actual suspend fun verifyPasswordResetCode(code: String): String = rethrow { verifyPasswordResetCode(js, code).await<JsString>().toString() }
+    public actual suspend fun verifyPasswordResetCode(code: String): String = rethrow { verifyPasswordResetCode(native, code).await<JsString>().toString() }
 
     public actual suspend fun <T : ActionCodeResult> checkActionCode(code: String): T = rethrow {
-        val result = checkActionCode(js, code).await<dev.gitlive.firebase.auth.externals.ActionCodeInfo>()
+        val result = checkActionCode(native, code).await<dev.gitlive.firebase.auth.externals.ActionCodeInfo>()
         @Suppress("UNCHECKED_CAST")
         return when (result.operation) {
             "EMAIL_SIGNIN" -> ActionCodeResult.SignInWithEmailLink
@@ -120,56 +120,56 @@ public actual class FirebaseAuth internal constructor(internal val js: Auth) {
         } as T
     }
 
-    public actual fun useEmulator(host: String, port: Int): Unit = rethrow { connectAuthEmulator(js, "http://$host:$port") }
+    public actual fun useEmulator(host: String, port: Int): Unit = rethrow { connectAuthEmulator(native, "http://$host:$port") }
 }
 
-public val AuthResult.js: JsAuthResult get() = js
+public val AuthResult.js: JsAuthResult get() = native
 
-public actual class AuthResult(internal val js: JsAuthResult) {
+public actual class AuthResult(internal val native: JsAuthResult) {
     public actual val user: FirebaseUser?
-        get() = rethrow { js.user?.let { FirebaseUser(it) } }
+        get() = rethrow { native.user?.let { FirebaseUser(it) } }
     public actual val credential: AuthCredential?
-        get() = rethrow { js.credential?.let { AuthCredential(it) } }
+        get() = rethrow { native.credential?.let { AuthCredential(it) } }
     public actual val additionalUserInfo: AdditionalUserInfo?
-        get() = rethrow { js.additionalUserInfo?.let { AdditionalUserInfo(it) } }
+        get() = rethrow { native.additionalUserInfo?.let { AdditionalUserInfo(it) } }
 }
 
-public val AdditionalUserInfo.js: JsAdditionalUserInfo get() = js
+public val AdditionalUserInfo.js: JsAdditionalUserInfo get() = native
 
 public actual class AdditionalUserInfo(
-    internal val js: JsAdditionalUserInfo,
+    internal val native: JsAdditionalUserInfo,
 ) {
     public actual val providerId: String?
-        get() = js.providerId
+        get() = native.providerId
     public actual val username: String?
-        get() = js.username
+        get() = native.username
     public actual val profile: Map<String, Any?>?
         get() = rethrow {
-            val profile = js.profile ?: return@rethrow null
+            val profile = native.profile ?: return@rethrow null
             jsObjectKeys(profile).toList().associate { key -> key.toString() to jsPropertyGet(profile, key.toString()).toKotlinAny() }
         }
     public actual val isNewUser: Boolean
-        get() = js.newUser
+        get() = native.newUser
 }
 
-public val AuthTokenResult.js: IdTokenResult get() = js
+public val AuthTokenResult.js: IdTokenResult get() = native
 
-public actual class AuthTokenResult(internal val js: IdTokenResult) {
+public actual class AuthTokenResult(internal val native: IdTokenResult) {
 //    actual val authTimestamp: Long
-//        get() = js.authTime
+//        get() = native.authTime
     public actual val claims: Map<String, Any>
-        get() = jsObjectKeys(js.claims).toList().mapNotNull { key ->
-            jsPropertyGet(js.claims, key.toString()).toKotlinAny()?.let { key.toString() to it }
+        get() = jsObjectKeys(native.claims).toList().mapNotNull { key ->
+            jsPropertyGet(native.claims, key.toString()).toKotlinAny()?.let { key.toString() to it }
         }.toMap()
 
 //    actual val expirationTimestamp: Long
 //        get() = android.expirationTime
 //    actual val issuedAtTimestamp: Long
-//        get() = js.issuedAtTime
+//        get() = native.issuedAtTime
     public actual val signInProvider: String?
-        get() = js.signInProvider
+        get() = native.signInProvider
     public actual val token: String?
-        get() = js.token
+        get() = native.token
 }
 
 internal fun ActionCodeSettings.toJsAny(): JsAny = actionCodeSettingsToJsAny(

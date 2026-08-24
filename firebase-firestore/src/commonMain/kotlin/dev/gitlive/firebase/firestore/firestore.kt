@@ -199,6 +199,7 @@ public data class Transaction internal constructor(internal val nativeWrapper: N
 
     @JvmName("updateFields")
     @Deprecated("Deprecated. Use `updateFields` instead", replaceWith = ReplaceWith("updateFields(documentRef) { fieldsAndValues.forEach { (field, value) -> field to value } }"))
+    @Suppress("DEPRECATION")
     public fun update(documentRef: DocumentReference, vararg fieldsAndValues: Pair<String, Any?>): Transaction = update(documentRef, *fieldsAndValues) {}
 
     @JvmName("updateFields")
@@ -214,6 +215,7 @@ public data class Transaction internal constructor(internal val nativeWrapper: N
 
     @JvmName("updateFieldPaths")
     @Deprecated("Deprecated. Use `updateFields` instead", replaceWith = ReplaceWith("updateFields(documentRef) { fieldsAndValues.forEach { (field, value) -> field to value } }"))
+    @Suppress("DEPRECATION")
     public fun update(documentRef: DocumentReference, vararg fieldsAndValues: Pair<FieldPath, Any?>): Transaction = update(documentRef, *fieldsAndValues) {}
 
     @JvmName("updateFieldPaths")
@@ -274,6 +276,7 @@ public open class Query internal constructor(internal val nativeQuery: NativeQue
     public fun startAfter(document: DocumentSnapshot): Query = Query(nativeQuery.startAfter(document.native))
 
     @Deprecated("Deprecated. Use `startAfterFieldValues` instead", replaceWith = ReplaceWith("startAfterFieldValues { fieldValues.forEach { add(it) } }"))
+    @Suppress("DEPRECATION")
     public fun startAfter(vararg fieldValues: Any?): Query = startAfter(*fieldValues) {}
 
     @Deprecated("Deprecated. Use `startAfterFieldValues` instead", replaceWith = ReplaceWith("startAfterFieldValues {\napply(buildSettings)\nfieldValues.forEach { add(it) }\n}"))
@@ -296,6 +299,7 @@ public open class Query internal constructor(internal val nativeQuery: NativeQue
     public fun startAt(document: DocumentSnapshot): Query = Query(nativeQuery.startAt(document.native))
 
     @Deprecated("Deprecated. Use `startAtFieldValues` instead", replaceWith = ReplaceWith("startAtFieldValues { fieldValues.forEach { add(it) } }"))
+    @Suppress("DEPRECATION")
     public fun startAt(vararg fieldValues: Any?): Query = startAt(*fieldValues) {}
 
     @Deprecated("Deprecated. Use `startAtFieldValues` instead", replaceWith = ReplaceWith("startAtFieldValues {\napply(buildSettings)\nfieldValues.forEach { add(it) }\n}"))
@@ -317,6 +321,7 @@ public open class Query internal constructor(internal val nativeQuery: NativeQue
     public fun endBefore(document: DocumentSnapshot): Query = Query(nativeQuery.endBefore(document.native))
 
     @Deprecated("Deprecated. Use `endBefore` instead", replaceWith = ReplaceWith("endBeforeFieldValues { fieldValues.forEach { add(it) } }"))
+    @Suppress("DEPRECATION")
     public fun endBefore(vararg fieldValues: Any?): Query = endBefore(*fieldValues) {}
 
     @Deprecated("Deprecated. Use `endBefore` instead", replaceWith = ReplaceWith("endBefore {\napply(buildSettings)\nfieldValues.forEach { add(it) }\n}"))
@@ -338,6 +343,7 @@ public open class Query internal constructor(internal val nativeQuery: NativeQue
     public fun endAt(document: DocumentSnapshot): Query = Query(nativeQuery.endAt(document.native))
 
     @Deprecated("Deprecated. Use `endAtFieldValues` instead", replaceWith = ReplaceWith("endAtFieldValues { fieldValues.forEach { add(it) } }"))
+    @Suppress("DEPRECATION")
     public fun endAt(vararg fieldValues: Any?): Query = endAt(*fieldValues) {}
 
     @Deprecated("Deprecated. Use `endAt` instead", replaceWith = ReplaceWith("endAt {\napply(buildSettings)\nfieldValues.forEach { add(it) }\n}"))
@@ -472,6 +478,7 @@ public data class WriteBatch internal constructor(internal val nativeWrapper: Na
 
     @JvmName("updateField")
     @Deprecated("Deprecated. Use `updateFields` instead", replaceWith = ReplaceWith("updateFields(documentRef) { fieldsAndValues.forEach { (field, value) -> field to value } }"))
+    @Suppress("DEPRECATION")
     public fun update(documentRef: DocumentReference, vararg fieldsAndValues: Pair<String, Any?>): WriteBatch = update(documentRef, *fieldsAndValues) {}
 
     @JvmName("updateField")
@@ -487,6 +494,7 @@ public data class WriteBatch internal constructor(internal val nativeWrapper: Na
 
     @JvmName("updateFieldPath")
     @Deprecated("Deprecated. Use `updateFields` instead", replaceWith = ReplaceWith("updateFields(documentRef) { fieldsAndValues.forEach { (field, value) -> field to value } }"))
+    @Suppress("DEPRECATION")
     public fun update(documentRef: DocumentReference, vararg fieldsAndValues: Pair<FieldPath, Any?>): WriteBatch = update(documentRef, *fieldsAndValues) {}
 
     @JvmName("updateFieldPath")
@@ -656,6 +664,7 @@ public data class DocumentReference internal constructor(internal val native: Na
 
     @JvmName("updateFields")
     @Deprecated("Deprecated. Use `updateFields` instead", replaceWith = ReplaceWith("updateFields { fieldsAndValues.forEach { (field, value) -> field to value } }"))
+    @Suppress("DEPRECATION")
     public suspend fun update(vararg fieldsAndValues: Pair<String, Any?>): Unit = update(*fieldsAndValues) {}
 
     @JvmName("updateFields")

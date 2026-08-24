@@ -9,6 +9,7 @@ import dev.gitlive.firebase.firestore.QuerySnapshot
 import dev.gitlive.firebase.firestore.Source
 import dev.gitlive.firebase.firestore.WhereConstraint
 import dev.gitlive.firebase.firestore.errorToException
+import dev.gitlive.firebase.firestore.js
 import dev.gitlive.firebase.firestore.externals.Query
 import dev.gitlive.firebase.firestore.externals.QueryConstraint
 import dev.gitlive.firebase.firestore.externals.AggregateField

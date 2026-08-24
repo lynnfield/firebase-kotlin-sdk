@@ -121,7 +121,6 @@ internal actual class NativeFirebaseFirestoreWrapper internal constructor(
 
     actual suspend fun clearPersistence(): Unit = rethrow {
         clearIndexedDbPersistence(js).await<JsAny?>()
-        Unit
     }
 
     actual fun useEmulator(host: String, port: Int) = rethrow {

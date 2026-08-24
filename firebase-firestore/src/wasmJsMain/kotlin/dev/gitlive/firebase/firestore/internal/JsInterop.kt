@@ -66,7 +66,10 @@ internal fun Any?.toJsAny(): JsAny? = when (val value = this) {
         }
     }
     is List<*> -> jsNewArray().also { array -> value.forEach { jsArrayPush(array, it.toJsAny()) } }
-    else -> value as JsAny
+    else -> {
+        @Suppress("UNCHECKED_CAST_TO_EXTERNAL_INTERFACE")
+        value as JsAny
+    }
 }
 
 private fun JsArray<JsString>.toKotlinList(): List<String> {
