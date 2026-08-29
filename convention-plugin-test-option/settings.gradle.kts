@@ -1,3 +1,5 @@
+rootProject.name = "convention-plugin-test-option"
+
 dependencyResolutionManagement {
     repositories {
         google()

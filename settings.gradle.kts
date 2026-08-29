@@ -1,3 +1,4 @@
+rootProject.name="firebase-kotlin-sdk"
 include(
     "firebase-analytics",
     "firebase-app",
